@@ -7,9 +7,7 @@ describe('The pipeline pipe method', () => {
   var pipeline
 
   beforeEach(() => {
-    pipeline = new Pipeline({
-      value: 'Matter'
-    })
+    pipeline = new Pipeline()
   })
 
   it('creates a new pipeline', () => {
@@ -20,20 +18,6 @@ describe('The pipeline pipe method', () => {
     let newPipeline = pipeline.pipe(stage)
 
     expect(newPipeline).to.not.equal(pipeline)
-  })
-
-  it('copies the matter', () => {
-    let stage = {
-      execute: 'Execute method'
-    }
-
-    let newPipeline = pipeline.pipe(stage)
-
-    let oldMatter = pipeline.matter
-    let newMatter = newPipeline.matter
-
-    expect(newMatter).to.not.equal(oldMatter)
-    expect(newMatter).to.deep.equal(oldMatter)
   })
 
   it('adds piped stages in order', () => {
@@ -52,16 +36,14 @@ describe('The pipeline pipe method', () => {
   })
 })
 
-describe('The pipeline collect method', () => {
+describe('The pipeline process method', () => {
   var pipeline
 
   beforeEach(() => {
-    pipeline = new Pipeline({
-      value: 'Matter'
-    })
+    pipeline = new Pipeline()
   })
 
-  it('feeds the pipeline matter to the first stage', () => {
+  it('feeds the process matter to the first stage', () => {
     let spy = sinon.spy()
 
     let stage = {
@@ -70,7 +52,9 @@ describe('The pipeline collect method', () => {
 
     pipeline
       .pipe(stage)
-      .collect()
+      .process({
+        value: 'Matter'
+      })
 
     sinon.assert.calledWith(spy, {
       value: 'Matter'
@@ -91,7 +75,7 @@ describe('The pipeline collect method', () => {
     pipeline
       .pipe(stage0)
       .pipe(stage1)
-      .collect()
+      .process()
 
     sinon.assert.callOrder(spy0, spy1)
   })
@@ -121,7 +105,7 @@ describe('The pipeline collect method', () => {
       .pipe(stage0)
       .pipe(stage1)
       .pipe(stage2)
-      .collect()
+      .process()
 
     sinon.assert.calledWith(stub1, {
       value: 'Matter 0'
@@ -133,7 +117,7 @@ describe('The pipeline collect method', () => {
 
   it('returns the last stage result', () => {
     let stub = sinon.stub().returns({
-      value: 'Matter 1'
+      value: 'Matter'
     })
 
     let stage = {
@@ -142,10 +126,10 @@ describe('The pipeline collect method', () => {
 
     let result =pipeline
       .pipe(stage)
-      .collect()
+      .process()
 
     expect(result).to.be.deep.equal({
-      value: 'Matter 1'
+      value: 'Matter'
     })
   })
 })

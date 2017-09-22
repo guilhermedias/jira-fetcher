@@ -1,22 +1,20 @@
 import clone from 'clone'
 
 export class Pipeline {
-  constructor(matter, stages=[]) {
-    this.matter = matter
+  constructor(stages=[]) {
     this.stages = stages
   }
 
   pipe(stage) {
-    let matterClone = clone(this.matter)
     let stagesClone = clone(this.stages)
 
     stagesClone.push(stage)
 
-    return new Pipeline(matterClone, stagesClone)
+    return new Pipeline(stagesClone)
   }
 
-  collect() {
-    var transformedMatter = this.matter
+  process(matter) {
+    var transformedMatter = matter
 
     this.stages.forEach((stage) => {
       transformedMatter = stage.execute(transformedMatter)
