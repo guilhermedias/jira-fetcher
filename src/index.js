@@ -21,4 +21,9 @@ jiraService.fetchIssue('JRA-9')
 
     console.log(`Summary: ${normalizedSummary}`)
     console.log(`Description: ${normalizedDescription}`)
+
+    issue.comments.forEach((comment) => {
+      console.log('Comment:')
+      console.log(normalizationPipeline.process(comment))
+    })
   })
