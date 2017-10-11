@@ -16,14 +16,12 @@ jiraService.fetchIssue('JRA-9')
       .pipe(removeExtraSpaces)
       .pipe(toLowerCase)
 
-    let normalizedSummary = normalizationPipeline.process(issue.summary)
-    let normalizedDescription = normalizationPipeline.process(issue.description)
+    issue.summary = normalizationPipeline.process(issue.summary)
+    issue.description = normalizationPipeline.process(issue.description)
 
-    console.log(`Summary: ${normalizedSummary}`)
-    console.log(`Description: ${normalizedDescription}`)
-
-    issue.comments.forEach((comment) => {
-      console.log('Comment:')
-      console.log(normalizationPipeline.process(comment))
+    issue.comments = issue.comments.map((comment) => {
+      return normalizationPipeline.process(comment)
     })
+
+    console.log(JSON.stringify(issue))
   })
